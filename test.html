@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>QR 划词助手 - 测试页</title>
+<style>
+  body { font: 15px/1.8 "Segoe UI", "Microsoft YaHei", sans-serif; max-width: 860px; margin: 40px auto; padding: 0 20px; color: #333; }
+  h2 { border-left: 4px solid #1677ff; padding-left: 10px; }
+  .tip { background: #f0f7ff; border: 1px solid #cfe5ff; border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+  .qr-demo { display: flex; flex-wrap: wrap; gap: 32px; margin: 20px 0; }
+  .qr-item { text-align: center; }
+  .qr-item .holder { display: inline-block; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
+  .qr-item p { margin: 8px 0 0; color: #666; font-size: 13px; }
+  .select-zone { background: #fffbe6; border: 1px dashed #e6a23c; border-radius: 8px; padding: 16px 20px; margin: 16px 0; user-select: text; }
+</style>
+</head>
+<body>
+<h1>QR 划词助手 - 测试页</h1>
+
+<div class="tip">
+  <b>测试一（划词生成二维码）：</b>用鼠标划选下面黄色区域中的任意文字 → 右键 →「生成二维码」。<br>
+  <b>测试二（框选识别二维码）：</b>点击浏览器工具栏的插件图标（或页面右键 →「框选识别页面二维码」），拖动框选下方任意二维码。
+</div>
+
+<h2>① 划词测试区（划选文字后右键）</h2>
+<div class="select-zone">
+  <p>https://www.example.com/path?query=中文参数&amp;id=42</p>
+  <p>这是一段用于测试二维码生成的中文文字，划选我，然后点击右键菜单中的"生成二维码"。</p>
+  <p>13800138000</p>
+  <p>Scrt 2FA test: JBSWY3DPEHPK3PXP</p>
+</div>
+
+<h2>② 框选识别测试区（用插件图标框选下方二维码）</h2>
+<div class="qr-demo">
+  <div class="qr-item"><span class="holder" id="qr1"></span><p>网址二维码</p></div>
+  <div class="qr-item"><span class="holder" id="qr2"></span><p>中文内容二维码</p></div>
+  <div class="qr-item"><span class="holder" id="qr3"></span><p>WiFi 连接信息</p></div>
+  <div class="qr-item"><span class="holder" id="qr4"></span><p>名片（vCard）</p></div>
+</div>
+
+<script src="libs/qrcode.min.js"></script>
+<script>
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+  function render(id, text) {
+    var qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    document.getElementById(id).innerHTML = qr.createSvgTag({ cellSize: 4, margin: 4 });
+  }
+  render('qr1', 'https://www.example.com/hello?from=qrtool');
+  render('qr2', '你好世界 - QR划词助手中文识别测试');
+  render('qr3', 'WIFI:T:WPA;S:MyHomeWiFi;P:password123;;');
+  render('qr4', 'BEGIN:VCARD\nVERSION:3.0\nFN:张三\nTEL:13800138000\nEMAIL:zhang@example.com\nEND:VCARD');
+</script>
+</body>
+</html>
