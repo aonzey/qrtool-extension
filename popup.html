@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>QR</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <span class="badge"></span>
+    <span class="title" id="popup-title">QR</span>
+  </header>
+
+  <div class="qr-wrap" id="qr-holder">
+    <div class="qr-placeholder" id="qr-placeholder">…</div>
+  </div>
+  <div class="qr-status" id="qr-status"></div>
+
+  <input id="qr-input" type="text" spellcheck="false" autocomplete="off">
+
+  <div class="foot">
+    <button id="btn-generate" class="btn primary">生成</button>
+    <button id="btn-decode" class="btn">框选识别</button>
+  </div>
+
+  <script src="libs/qrcode.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

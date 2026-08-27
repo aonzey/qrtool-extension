@@ -16,6 +16,16 @@
   var HOST_ID = '__qr-tool-host__';
   var Z_TOP = 2147483646;
 
+  // i18n：优先取 _locales 消息，取不到则回退中文
+  function t(key, fallback) {
+    try {
+      var m = chrome.i18n.getMessage(key);
+      return m || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
   /* ---------------------------------------------------------------- *
    *  消息入口
    * ---------------------------------------------------------------- */
@@ -28,7 +38,7 @@
     } else if (msg.type === 'decodeImage') {
       decodeImage(msg.dataUrl, msg.rect, msg.dpr);
     } else if (msg.type === 'decodeError') {
-      showResultPanel(null, '截图失败：' + (msg.error || '未知错误'));
+      showResultPanel(null, t('errCapture', '截图失败：') + (msg.error || t('errUnknown', '未知错误')));
     }
   });
 
@@ -82,27 +92,27 @@
       '.btn:only-child{flex:1}' +
     '</style>' +
     '<div class="panel" id="qr-panel" style="display:none">' +
-      '<div class="head"><span class="badge"></span><span class="title">已生成二维码</span>' +
-      '<button class="btn-close" data-act="close" title="关闭">×</button></div>' +
+      '<div class="head"><span class="badge"></span><span class="title">' + t('panelQrTitle', '已生成二维码') + '</span>' +
+      '<button class="btn-close" data-act="close" title="' + t('btnClose', '关闭') + '">×</button></div>' +
       '<div class="body">' +
         '<div class="qr-wrap" id="qr-holder"></div>' +
         '<div class="text-box" id="qr-text"></div>' +
         '<div class="foot">' +
-          '<button class="btn plain" data-act="copy-qr">复制文字</button>' +
-          '<button class="btn" data-act="close">关闭</button>' +
+          '<button class="btn plain" data-act="copy-qr">' + t('btnCopyText', '复制文字') + '</button>' +
+          '<button class="btn" data-act="close">' + t('btnClose', '关闭') + '</button>' +
         '</div>' +
       '</div>' +
     '</div>' +
     '<div class="panel" id="result-panel" style="display:none">' +
-      '<div class="head"><span class="badge"></span><span class="title">二维码识别结果</span>' +
-      '<button class="btn-close" data-act="close" title="关闭">×</button></div>' +
+      '<div class="head"><span class="badge"></span><span class="title">' + t('panelResultTitle', '二维码识别结果') + '</span>' +
+      '<button class="btn-close" data-act="close" title="' + t('btnClose', '关闭') + '">×</button></div>' +
       '<div class="body">' +
         '<div style="text-align:center;margin-bottom:10px" id="shot-holder"></div>' +
         '<div class="text-box" id="result-text" contenteditable="true" spellcheck="false"></div>' +
         '<div class="status" id="result-status"></div>' +
         '<div class="foot" id="result-foot">' +
-          '<button class="btn plain" data-act="copy-result">复制</button>' +
-          '<button class="btn" data-act="open-url" style="display:none">打开链接</button>' +
+          '<button class="btn plain" data-act="copy-result">' + t('btnCopy', '复制') + '</button>' +
+          '<button class="btn" data-act="open-url" style="display:none">' + t('btnOpenUrl', '打开链接') + '</button>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -137,7 +147,7 @@
     var done = function () {
       if (!btn) return;
       var old = btn.textContent;
-      btn.textContent = '已复制';
+      btn.textContent = t('copied', '已复制');
       setTimeout(function () { btn.textContent = old; }, 1200);
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -209,7 +219,7 @@
       if (svgEl) { svgEl.removeAttribute('width'); svgEl.removeAttribute('height'); }
     } catch (e) {
       holder.innerHTML = '<div style="color:#f56c6c;font-size:12px;padding:16px 8px">' +
-        '生成失败：文字过长，超出二维码容量，请缩短后重试</div>';
+        t('errTooLong', '生成失败：文字过长，超出二维码容量，请缩短后重试') + '</div>';
     }
     textBox.textContent = text.length > 500 ? text.slice(0, 500) + '…' : text;
 
@@ -232,7 +242,7 @@
       ';background:rgba(0,0,0,.12);cursor:crosshair;';
 
     var hint = document.createElement('div');
-    hint.textContent = '拖动鼠标框选二维码区域，按 Esc 取消';
+    hint.textContent = t('hintSelect', '拖动鼠标框选二维码区域，按 Esc 取消');
     hint.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:' + Z_TOP +
       ';background:#1677ff;color:#fff;padding:8px 18px;border-radius:20px;font:13px/1 "Segoe UI",' +
       '"Microsoft YaHei",sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;';
@@ -322,7 +332,7 @@
       var sw = Math.min(img.width - sx, Math.round(rect.w * dpr) + MARGIN * 2);
       var sh = Math.min(img.height - sy, Math.round(rect.h * dpr) + MARGIN * 2);
       if (sw <= 0 || sh <= 0) {
-        showResultPanel(null, '选区无效，请重新框选');
+        showResultPanel(null, t('errInvalidRegion', '选区无效，请重新框选'));
         return;
       }
 
@@ -348,11 +358,11 @@
           image: croppedUrl
         });
       } else {
-        showResultPanel({ image: croppedUrl }, '未识别到二维码，请尽量框选完整、清晰的二维码后重试');
+        showResultPanel({ image: croppedUrl }, t('errNotFound', '未识别到二维码，请尽量框选完整、清晰的二维码后重试'));
       }
     };
     img.onerror = function () {
-      showResultPanel(null, '截图加载失败，请重试');
+      showResultPanel(null, t('errImageLoad', '截图加载失败，请重试'));
     };
     img.src = dataUrl;
   }

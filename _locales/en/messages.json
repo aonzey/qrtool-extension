@@ -1,0 +1,89 @@
+{
+  "extName": {
+    "message": "QR Selection Assistant",
+    "description": "Extension name"
+  },
+  "extDesc": {
+    "message": "Select text and right-click to generate a QR code; drag to select any area of a page to decode QR codes; click the toolbar icon for a QR code of the current URL",
+    "description": "Extension description"
+  },
+  "actionTitle": {
+    "message": "QR Code Toolkit",
+    "description": "Toolbar button tooltip"
+  },
+  "popupTitle": {
+    "message": "QR Code Toolkit",
+    "description": "Popup title"
+  },
+  "inputPlaceholder": {
+    "message": "Enter text to encode",
+    "description": "Input placeholder"
+  },
+  "btnGenerate": {
+    "message": "Generate",
+    "description": "Generate QR code button"
+  },
+  "btnDecode": {
+    "message": "Select & Decode",
+    "description": "Select region to decode QR button"
+  },
+  "errEmpty": {
+    "message": "Please enter some text",
+    "description": "Hint when input is empty"
+  },
+  "menuGenQr": {
+    "message": "Create QR code: \"$1\"",
+    "description": "Context menu item for selected text",
+    "placeholders": {
+      "selection": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuDecodeRegion": {
+    "message": "Decode QR code by selecting an area",
+    "description": "Context menu item for region selection"
+  },
+  "panelQrTitle": {
+    "message": "QR code generated"
+  },
+  "panelResultTitle": {
+    "message": "QR code content"
+  },
+  "btnClose": {
+    "message": "Close"
+  },
+  "btnCopyText": {
+    "message": "Copy text"
+  },
+  "btnCopy": {
+    "message": "Copy"
+  },
+  "btnOpenUrl": {
+    "message": "Open link"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "errTooLong": {
+    "message": "Failed: the text is too long for a QR code, please shorten it and retry"
+  },
+  "hintSelect": {
+    "message": "Drag to select the QR code area, press Esc to cancel"
+  },
+  "errCapture": {
+    "message": "Screenshot failed: "
+  },
+  "errUnknown": {
+    "message": "Unknown error"
+  },
+  "errInvalidRegion": {
+    "message": "Invalid selection, please try again"
+  },
+  "errNotFound": {
+    "message": "No QR code found. Please select a complete and clear QR code and retry"
+  },
+  "errImageLoad": {
+    "message": "Failed to load screenshot, please retry"
+  }
+}

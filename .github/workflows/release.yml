@@ -31,7 +31,7 @@ jobs:
       - name: Prepare extension directory (distro files only)
         run: |
           mkdir -p "$RUNNER_TEMP/ext"
-          cp -r manifest.json background.js content.js libs icons "$RUNNER_TEMP/ext/"
+          cp -r manifest.json background.js content.js popup.html popup.css popup.js libs icons _locales "$RUNNER_TEMP/ext/"
 
       - name: Restore signing key
         env:
@@ -76,8 +76,9 @@ jobs:
             或使用下方 ZIP 方式（效果一致）。
 
             ## 功能
+            - 点击工具栏图标 → 当前页面网址的二维码（输入框可自定义内容重新生成）
             - 划选文字 → 右键 → 生成二维码（浮层展示、可复制）
-            - 点击工具栏图标框选页面区域 → 识别二维码（多尺度 + 反色解码）
+            - 弹窗「框选识别」按钮或右键菜单 → 框选页面区域识别二维码（多尺度 + 反色解码）
             - 支持 Chrome / Edge（Manifest V3）
           files: |
             qrtool-extension-v*.crx

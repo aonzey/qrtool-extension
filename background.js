@@ -1,33 +1,21 @@
 // background.js — MV3 service worker
 // 职责：注册右键菜单、按需注入内容脚本、截图、消息中转
+// 工具栏图标点击 -> 打开 popup（见 popup.html），框选识别由 popup 按钮触发
 
 chrome.runtime.onInstalled.addListener(() => {
   // 1) 划选文字 -> 生成二维码
   chrome.contextMenus.create({
     id: 'qr-from-selection',
-    title: '生成二维码："%s"',
+    title: chrome.i18n.getMessage('menuGenQr', ['%s']) || '生成二维码："%s"',
     contexts: ['selection']
   });
 
   // 2) 框选区域 -> 识别二维码
   chrome.contextMenus.create({
     id: 'qr-decode-region',
-    title: '框选识别页面二维码',
+    title: chrome.i18n.getMessage('menuDecodeRegion') || '框选识别页面二维码',
     contexts: ['page', 'image', 'link', 'video', 'frame']
   });
-});
-
-// 点击工具栏图标 -> 框选识别
-chrome.action.onClicked.addListener(async (tab) => {
-  if (!tab || !tab.id) return;
-  const ok = await injectContentScripts(tab.id);
-  if (ok) {
-    try {
-      await chrome.tabs.sendMessage(tab.id, { type: 'startRegionSelect' });
-    } catch (e) {
-      console.warn('QRTool: 无法发送消息到页面（可能是受限页面）', e);
-    }
-  }
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -81,7 +69,24 @@ async function injectContentScripts(tabId) {
 }
 
 // 内容脚本 -> 截图 -> 回传给内容脚本解码
+// popup -> 框选识别按钮 -> 注入内容脚本并开始框选
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg && msg.type === 'startRegionSelectFromPopup') {
+    (async () => {
+      try {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        const tab = tabs && tabs[0];
+        if (!tab || !tab.id) return;
+        const ok = await injectContentScripts(tab.id);
+        if (ok) {
+          await chrome.tabs.sendMessage(tab.id, { type: 'startRegionSelect' });
+        }
+      } catch (e) {
+        console.warn('QRTool: 无法开始框选识别（可能是受限页面）', e);
+      }
+    })();
+  }
+
   if (msg && msg.type === 'captureRegion' && sender.tab && sender.tab.id) {
     (async () => {
       const tabId = sender.tab.id;
