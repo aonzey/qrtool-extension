@@ -1,0 +1,84 @@
+name: Build Extension Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Read version from manifest.json
+        id: ver
+        run: echo "version=$(node -p "require('./manifest.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Install crx3 packer
+        run: npm install --prefix "$RUNNER_TEMP/crxtool" crx3
+
+      - name: Prepare extension directory (distro files only)
+        run: |
+          mkdir -p "$RUNNER_TEMP/ext"
+          cp -r manifest.json background.js content.js libs icons "$RUNNER_TEMP/ext/"
+
+      - name: Restore signing key
+        env:
+          CRX_PRIVATE_KEY: ${{ secrets.CRX_PRIVATE_KEY }}
+        run: printf '%s' "$CRX_PRIVATE_KEY" | base64 -d > "$RUNNER_TEMP/qrtool-extension.pem"
+
+      - name: Pack CRX3 and ZIP
+        run: |
+          node -e '
+            const crx3 = require(process.env.RUNNER_TEMP + "/crxtool/node_modules/crx3");
+            const tmp = process.env.RUNNER_TEMP;
+            const version = process.env.VERSION;
+            Promise.all([
+              crx3([tmp + "/ext/manifest.json"], {
+                keyPath: tmp + "/qrtool-extension.pem",
+                crxPath: "qrtool-extension-v" + version + ".crx",
+                zipPath: "qrtool-extension-v" + version + ".zip"
+              })
+            ]).then(() => console.log("packed v" + version))
+              .catch(e => { console.error(e); process.exit(1); });
+          '
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: QR 划词助手 v${{ steps.ver.outputs.version }}
+          body: |
+            ## 安装说明
+
+            ### Chrome / Edge（开发者模式加载，推荐）
+            1. 下载 `qrtool-extension-v${{ steps.ver.outputs.version }}.zip` 并解压
+            2. 打开 `chrome://extensions`（Edge 为 `edge://extensions`）
+            3. 开启右上角「开发者模式」→「加载已解压的扩展程序」→ 选择解压后的文件夹
+
+            ### CRX 文件说明
+            `qrtool-extension-v${{ steps.ver.outputs.version }}.crx` 为 CRX3 格式。
+            Chrome 75+ 对非商店来源的 CRX 有安全限制，直接双击安装会报 `CRX_REQUIRED_PROOF_MISSING`；
+            如需使用 CRX，请先开启开发者模式并重启浏览器，再通过 `chrome://extensions` 页面拖入安装，
+            或使用下方 ZIP 方式（效果一致）。
+
+            ## 功能
+            - 划选文字 → 右键 → 生成二维码（浮层展示、可复制）
+            - 点击工具栏图标框选页面区域 → 识别二维码（多尺度 + 反色解码）
+            - 支持 Chrome / Edge（Manifest V3）
+          files: |
+            qrtool-extension-v*.crx
+            qrtool-extension-v*.zip
