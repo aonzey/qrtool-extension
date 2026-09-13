@@ -10,7 +10,14 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ['selection']
   });
 
-  // 2) 框选区域 -> 识别二维码
+  // 2) 右键超链接 -> 把链接地址转成二维码
+  chrome.contextMenus.create({
+    id: 'qr-from-link',
+    title: chrome.i18n.getMessage('menuGenQrLink', ['%s']) || '把链接转成二维码："%s"',
+    contexts: ['link']
+  });
+
+  // 3) 框选区域 -> 识别二维码
   chrome.contextMenus.create({
     id: 'qr-decode-region',
     title: chrome.i18n.getMessage('menuDecodeRegion') || '框选识别页面二维码',
@@ -40,6 +47,20 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (ok) {
       try {
         await chrome.tabs.sendMessage(tab.id, { type: 'showQR', text: text });
+      } catch (e) { /* ignore */ }
+    }
+  }
+
+  if (info.menuItemId === 'qr-from-link') {
+    // 右键超链接：直接取链接地址（linkUrl 已是绝对地址）
+    let link = info.linkUrl || '';
+    if (!link) return;
+    if (link.length > 2000) link = link.slice(0, 2000);
+
+    const ok2 = await injectContentScripts(tab.id);
+    if (ok2) {
+      try {
+        await chrome.tabs.sendMessage(tab.id, { type: 'showQR', text: link });
       } catch (e) { /* ignore */ }
     }
   }

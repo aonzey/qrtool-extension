@@ -12,6 +12,8 @@
   .qr-item .holder { display: inline-block; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
   .qr-item p { margin: 8px 0 0; color: #666; font-size: 13px; }
   .select-zone { background: #fffbe6; border: 1px dashed #e6a23c; border-radius: 8px; padding: 16px 20px; margin: 16px 0; user-select: text; }
+  .link-zone { background: #f6ffed; border: 1px dashed #95d475; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+  .link-zone p { margin: 6px 0; }
 </style>
 </head>
 <body>
@@ -19,10 +21,20 @@
 
 <div class="tip">
   <b>测试一（划词生成二维码）：</b>用鼠标划选下面黄色区域中的任意文字 → 右键 →「生成二维码」。<br>
-  <b>测试二（框选识别二维码）：</b>点击浏览器工具栏的插件图标（或页面右键 →「框选识别页面二维码」），拖动框选下方任意二维码。
+  <b>测试二（框选识别二维码）：</b>点击浏览器工具栏的插件图标 → 弹窗中点「框选识别」（或页面右键 →「框选识别页面二维码」），拖动框选下方任意二维码。<br>
+  <b>测试三（链接转二维码）：</b>在下面超链接测试区中任意链接上右键 →「把链接转成二维码："..."」。
 </div>
 
-<h2>① 划词测试区（划选文字后右键）</h2>
+<h2>① 超链接测试区（在链接上右键 →「把链接转成二维码」）</h2>
+<div class="link-zone">
+  <p><a href="https://github.com/aonzey/qrtool-extension">项目主页（绝对地址）</a></p>
+  <p><a href="https://www.example.com/path?query=%E4%B8%AD%E6%96%87&amp;id=42">带中文参数的链接</a></p>
+  <p><a href="test.html#anchor">页面内相对链接（会转成绝对地址）</a></p>
+  <p><a href="mailto:hello@example.com?subject=QR%20Test">mailto 邮箱链接</a></p>
+  <p><a href="https://github.com/aonzey/qrtool-extension"><img src="icons/icon48.png" alt="图片链接" style="vertical-align:middle;margin-right:6px">图片链接（右键图片也可）</a></p>
+</div>
+
+<h2>② 划词测试区（划选文字后右键）</h2>
 <div class="select-zone">
   <p>https://www.example.com/path?query=中文参数&amp;id=42</p>
   <p>这是一段用于测试二维码生成的中文文字，划选我，然后点击右键菜单中的"生成二维码"。</p>
@@ -30,7 +42,7 @@
   <p>Scrt 2FA test: JBSWY3DPEHPK3PXP</p>
 </div>
 
-<h2>② 框选识别测试区（用插件图标框选下方二维码）</h2>
+<h2>③ 框选识别测试区（用插件图标弹窗的「框选识别」框选下方二维码）</h2>
 <div class="qr-demo">
   <div class="qr-item"><span class="holder" id="qr1"></span><p>网址二维码</p></div>
   <div class="qr-item"><span class="holder" id="qr2"></span><p>中文内容二维码</p></div>

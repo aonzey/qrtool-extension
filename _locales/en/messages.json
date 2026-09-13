@@ -40,6 +40,15 @@
       }
     }
   },
+  "menuGenQrLink": {
+    "message": "Create QR code for link: \"$1\"",
+    "description": "Context menu item for a hyperlink",
+    "placeholders": {
+      "url": {
+        "content": "$1"
+      }
+    }
+  },
   "menuDecodeRegion": {
     "message": "Decode QR code by selecting an area",
     "description": "Context menu item for region selection"

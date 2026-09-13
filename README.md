@@ -2,14 +2,15 @@
 
 浏览器插件（Chrome / Edge，Manifest V3）
 
-- **中文**：点击图标查看当前网址二维码；划选文字右键生成二维码；框选页面区域识别二维码。
-- **English**: Click the toolbar icon for a QR code of the current URL; select text and right-click to generate a QR code; drag to select any area on a page to decode QR codes.
+- **中文**：点击图标查看当前网址二维码；划选文字或右键超链接生成二维码；框选页面区域识别二维码。
+- **English**: Click the toolbar icon for a QR code of the current URL; select text or right-click a hyperlink to generate a QR code; drag to select any area on a page to decode QR codes.
 
 ## 功能 / Features
 
 1. **点击图标查看当前网址二维码 / Click icon → URL QR code**：点击工具栏插件图标，弹出面板自动生成当前页面网址的二维码；可在输入框修改内容（默认当前网址）后点「生成」重新生成。
-2. **划选文字生成二维码 / Select text → QR code**：选中任意页面文字 → 右键 →「生成二维码："..."」，二维码在页面右上角浮层展示（可拖动、可复制原文）。
-3. **框选识别页面二维码 / Drag region → decode**：点击插件图标弹窗中的「框选识别」按钮（或页面右键 →「框选识别页面二维码」），拖动鼠标框选页面上的二维码，自动解码并弹窗显示结果，支持一键复制 / 打开链接。
+2. **超链接转二维码 / Right-click link → QR code**：在任意超链接上右键 →「把链接转成二维码："..."」，二维码在页面右上角浮层展示（可拖动、可复制链接地址）。
+3. **划选文字生成二维码 / Select text → QR code**：选中任意页面文字 → 右键 →「生成二维码："..."」，二维码在页面右上角浮层展示（可拖动、可复制原文）。
+4. **框选识别页面二维码 / Drag region → decode**：点击插件图标弹窗中的「框选识别」按钮（或页面右键 →「框选识别页面二维码」），拖动鼠标框选页面上的二维码，自动解码并弹窗显示结果，支持一键复制 / 打开链接。
 
 ## 安装 / Install（开发者模式加载 / Sideload）
 
