@@ -13,7 +13,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // 2) 右键超链接 -> 把链接地址转成二维码
   chrome.contextMenus.create({
     id: 'qr-from-link',
-    title: chrome.i18n.getMessage('menuGenQrLink', ['%s']) || '把链接转成二维码："%s"',
+    title: chrome.i18n.getMessage('menuGenQrLink') || '把超链接转成二维码',
     contexts: ['link']
   });
 
