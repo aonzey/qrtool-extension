@@ -41,7 +41,7 @@
     }
   },
   "menuGenQrLink": {
-    "message": "Create QR code for link: \"$1\"",
+    "message": "Create QR code for link",
     "description": "Context menu item for a hyperlink",
     "placeholders": {
       "url": {
