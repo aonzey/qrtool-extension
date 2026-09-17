@@ -41,7 +41,7 @@
     }
   },
   "menuGenQrLink": {
-    "message": "把链接转成二维码：\"$1\"",
+    "message": "把超链接转成二维码",
     "description": "右键超链接的菜单项",
     "placeholders": {
       "url": {
